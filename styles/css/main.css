@@ -1,0 +1,27 @@
+body {
+  font-family: 'Press Start 2P'; }
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin: auto;
+  font-size: 2em;
+  border: 1px solid #a6a6a6; }
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 1px; }
+
+.box {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #7d7d7d;
+  padding: 0.5em;
+  height: 2em;
+  margin: 1px; }
+
+/*# sourceMappingURL=main.css.map */
