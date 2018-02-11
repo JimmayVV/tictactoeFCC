@@ -7,7 +7,7 @@
 3. User Story: I can choose whether I want to play as X or O.
 
 ### TODO ###
-- Board layout
+- ~~Board layout~~
 - Start game modal
 - Place X on click
 - Alternate placing X/O on click
