@@ -1,3 +1,10 @@
+header {
+  font-size: 2rem;
+  text-align: center; }
+
+@media (max-width: 768px) {
+  header {
+    font-size: 1.5em; } }
 body {
   font-family: 'Press Start 2P';
   background-color: #323232;
@@ -25,5 +32,9 @@ body {
   padding: 0.5em;
   height: 2em;
   margin: 1px; }
+
+@media (max-width: 768px) {
+  .grid {
+    width: 80%; } }
 
 /*# sourceMappingURL=main.css.map */
