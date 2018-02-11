@@ -5,3 +5,15 @@
 2. User Story: My game will reset as soon as it's over so I can play again.
 
 3. User Story: I can choose whether I want to play as X or O.
+
+### TODO ###
+- Board layout
+- Start game modal
+- Place X on click
+- Alternate placing X/O on click
+- Win logic
+- End game modal
+- Single player mode toggle
+- Computer logic: random
+- Computer logic: smart/hard mode
+- Toggle easy/hard mode?
