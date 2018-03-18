@@ -1,32 +1,31 @@
-@import "header.scss";
+@import "headfoot.scss";
 
 body{
   font-family: 'Press Start 2P';
   background-color: #323232;
   color: #8cf562;
+  min-height: 100%;
 }
 .grid{
-  display: flex;
-  flex-direction: column;
+  display: none;
+  flex-direction: row;
   width: 40%;
   margin: auto;
   font-size: 2em;
   border  : 1px solid #a6a6a6;
+  flex-wrap: wrap;
 }
-.row{
-  display: flex;
-  align-items: center;
-  padding: 1px;
-}
+
 .box{
 flex-grow: 1;
 display:flex;
 align-items: center;
 justify-content: center;
+
 border  : 1px solid #7d7d7d;
-padding: 0.5em;
+padding: 1.6%;
 height: 2em;
-margin: 1px;
+width: 29%;
 }
 
 @media(max-width: 768px){

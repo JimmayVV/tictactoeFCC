@@ -5,23 +5,29 @@ header {
 @media (max-width: 768px) {
   header {
     font-size: 1.5em; } }
+footer {
+  position: absolute;
+  width: 100%;
+  margin: auto;
+  font-size: 1rem;
+  text-align: center;
+  bottom: 0;
+  text-transform: uppercase; }
+
 body {
   font-family: 'Press Start 2P';
   background-color: #323232;
-  color: #8cf562; }
+  color: #8cf562;
+  min-height: 100%; }
 
 .grid {
-  display: flex;
-  flex-direction: column;
+  display: none;
+  flex-direction: row;
   width: 40%;
   margin: auto;
   font-size: 2em;
-  border: 1px solid #a6a6a6; }
-
-.row {
-  display: flex;
-  align-items: center;
-  padding: 1px; }
+  border: 1px solid #a6a6a6;
+  flex-wrap: wrap; }
 
 .box {
   flex-grow: 1;
@@ -29,9 +35,9 @@ body {
   align-items: center;
   justify-content: center;
   border: 1px solid #7d7d7d;
-  padding: 0.5em;
+  padding: 1.6%;
   height: 2em;
-  margin: 1px; }
+  width: 29%; }
 
 @media (max-width: 768px) {
   .grid {

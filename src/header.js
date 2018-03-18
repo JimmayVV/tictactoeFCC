@@ -1,6 +1,6 @@
 var Header = (function(){
   const DOM = {},
-  content = `<h1>Let's play</h1>`;
+        content = `<h1>Let's play</h1>`;
 
   function cacheDom(){
     DOM.header = document.querySelector('header');
