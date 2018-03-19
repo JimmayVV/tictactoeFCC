@@ -9,9 +9,9 @@
 ### TODO ###
 - ~~Board layout~~
 - Start game modal
-- Place X on click
-- Alternate placing X/O on click
-- Win logic
+- ~~Place X on click~~
+- ~~Alternate placing X/O on click~~
+- ~~Win logic~~
 - End game modal
 - Single player mode toggle
 - Computer logic: random

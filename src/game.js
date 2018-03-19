@@ -1,27 +1,30 @@
 var Game = (function(){
   const DOM = {};
-  let winner = "";
-  let isX = true;
-  let gameOver = false;
+  const STATUS = {
+     winner : "",
+     isX : true,
+     gameOver : false,
+     userPlayer : "",
+     computerPlayer : ""
+  };
+
   const WINS = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
 
-  function render(){
-    //renderModal();
-    renderBoard();
-  }
 
-  function renderBoard(){
-    var content = "";
+  function render(){
     for (let i=1; i<10; i++){
-      content+= `<div class="box" id="${i}"></div>`
+      var box = document.createElement("div");
+      box.classList.add('box');
+      box.id = i;
+      DOM.game.appendChild(box);
     }
-    DOM.game.innerHTML = content;
     DOM.game.style.display = "flex";
     cacheBoxes();
   }
 
   function cacheDom(){
     DOM.game = document.querySelector('.grid')
+    DOM.choices = document.querySelector('.choices')
   }
 
   function cacheBoxes(){
@@ -29,9 +32,10 @@ var Game = (function(){
   }
 
   function checkWins(){
-    gameOver = WINS.some(win=>checkWin(win));
-    if (gameOver){
-      console.log(winner);
+    STATUS.gameOver = WINS.some(win=>checkWin(win));
+    if (STATUS.gameOver){
+      console.log(STATUS.winner);
+      console.log(Modal.test())
     }
 
   }
@@ -41,16 +45,19 @@ var Game = (function(){
     winArray.forEach(function(item){
       result += document.getElementById(item).innerHTML;
     })
-    winner = result[0];
-    return result== "XXX" ||  result == "OOO";
+    if (result== "XXX" ||  result == "OOO"){
+      STATUS.winner = result[0];
+      return true
+    };
+    return false;
   }
 
   function play(){
-    DOM.game.addEventListener("click", function move(e){
+    DOM.game.addEventListener("click", function humanMove(e){
       var target = e.target;
-      if (target.innerHTML=="" && !gameOver){
-        target.innerHTML = isX? "X": "O";
-        isX = !isX;
+      if (target.innerHTML=="" && !STATUS.gameOver){
+        target.innerHTML = STATUS.isX? "X": "O";
+        STATUS.isX = !STATUS.isX;
         checkWins();
       }
     }

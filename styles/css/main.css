@@ -14,6 +14,51 @@ footer {
   bottom: 0;
   text-transform: uppercase; }
 
+/* The Modal (background) */
+.modal {
+  display: block;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: black;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */ }
+
+/* Modal Content/Box */
+.modal-content {
+  color: #bbb;
+  background-color: #fefefe;
+  text-align: center;
+  margin: 15% auto;
+  /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  /* Could be more or less, depending on screen size */ }
+
+/* The Close Button */
+.choice {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold; }
+
+.choice:hover,
+.choice:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer; }
+
 body {
   font-family: 'Press Start 2P';
   background-color: #323232;
