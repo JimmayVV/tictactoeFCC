@@ -11,6 +11,7 @@ var Modal = (function() {
     MODAL.choices.addEventListener("click", function start(e){
       MODAL.modal.style.display = "none";
       MODAL.value = e.target.innerHTML;
+      Game.setUserPlayer(MODAL.value);
     })
   }
   function test(){
@@ -18,7 +19,6 @@ var Modal = (function() {
   }
   return {
     init:init,
-    test : test
   }
 
 })();
