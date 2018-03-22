@@ -27,10 +27,9 @@ var Game = (function() {
     // STATUS.isX = str == "X" ? true : false; would need this line for a 2 player mode
     render();
     if (STATUS.userPlayer=="O"){
-      console.log(STATUS.isX)
+      //console.log(STATUS.isX)
       computerMove();
     }
-
   }
 
   function render() {
@@ -90,8 +89,8 @@ var Game = (function() {
       STATUS.numMoves++
       if (!STATUS.gameOver){
         checkDraw();
-        computerMove();
       }
+      computerMove();
     }
   }
 
@@ -108,13 +107,15 @@ var Game = (function() {
   function computerMove(){
     getEmptySquares();
     let place = STATUS.availableMoves[Math.floor(Math.random()*STATUS.availableMoves.length)]
-    let target = DOM.game.querySelector('[data-value="'+place+'"]');
-    target.innerHTML = STATUS.isX?"X":"O";
-    STATUS.isX = !STATUS.isX
-    STATUS.numMoves++
-    checkWins()
-    if (!STATUS.gameOver){
-      checkDraw()
+    if (place){
+      let target = DOM.game.querySelector('[data-value="'+place+'"]');
+      target.innerHTML = STATUS.isX?"X":"O";
+      STATUS.isX = !STATUS.isX
+      STATUS.numMoves++
+      checkWins()
+      if (!STATUS.gameOver){
+        checkDraw()
+      }
     }
   }
 
