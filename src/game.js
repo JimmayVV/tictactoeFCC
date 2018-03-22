@@ -80,7 +80,10 @@ var Game = (function() {
       STATUS.isX = !STATUS.isX;
       checkWins();
       STATUS.numMoves++
-      checkDraw();
+      if (!STATUS.gameOver){
+        checkDraw();
+      
+      }
     }
 
   }
