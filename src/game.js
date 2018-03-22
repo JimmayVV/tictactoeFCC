@@ -46,9 +46,7 @@ var Game = (function() {
   function checkWins() {
     STATUS.gameOver = WINS.some(win => checkWin(win));
     if (STATUS.gameOver) {
-      console.log(STATUS.winner);
-      console.log(STATUS.userPlayer);
-      console.log(STATUS.computerPlayer);
+      console.log(STATUS.winner + " is the winner");
     }
 
   }
