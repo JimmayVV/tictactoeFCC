@@ -8,12 +8,13 @@
 
 ### TODO ###
 - ~~Board layout~~
-- Start game modal
+- ~~Start game modal~~
 - ~~Place X on click~~
 - ~~Alternate placing X/O on click~~
 - ~~Win logic~~
+- Reset the game
 - End game modal
 - Single player mode toggle
-- Computer logic: random
-- Computer logic: smart/hard mode
+- ~~Computer logic: random~~
+- Computer logic: hard mode (minimax?)
 - Toggle easy/hard mode?
