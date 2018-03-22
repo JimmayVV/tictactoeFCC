@@ -24,10 +24,8 @@ var Game = (function() {
   function setUserPlayer(str) {
     STATUS.userPlayer = str;
     STATUS.computerPlayer = str == "X" ? "O" : "X";
-    // STATUS.isX = str == "X" ? true : false; would need this line for a 2 player mode
     render();
     if (STATUS.userPlayer=="O"){
-      //console.log(STATUS.isX)
       computerMove();
     }
   }
@@ -101,7 +99,6 @@ var Game = (function() {
         STATUS.availableMoves.push(box.getAttribute('data-value'))
       }
     })
-
   }
 
   function computerMove(){
