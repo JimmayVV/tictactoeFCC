@@ -23,6 +23,7 @@ var Game = (function() {
   function setUserPlayer(str) {
     STATUS.userPlayer = str;
     STATUS.computerPlayer = str == "X" ? "O" : "X";
+    STATUS.isX = str == "X" ? true : false;
     render();
   }
 
