@@ -5,7 +5,8 @@ var Game = (function() {
     isX: true,
     gameOver: false,
     userPlayer: "",
-    computerPlayer: ""
+    computerPlayer: "",
+    numMoves: 0
   };
 
   const WINS = [
@@ -64,14 +65,25 @@ var Game = (function() {
   }
 
   function play() {
-    DOM.game.addEventListener("click", function humanMove(e) {
-      var target = e.target;
-      if (target.innerHTML == "" && !STATUS.gameOver) {
-        target.innerHTML = STATUS.isX ? "X" : "O";
-        STATUS.isX = !STATUS.isX;
-        checkWins();
-      }
-    })
+    DOM.game.addEventListener("click",  humanMove)
+  }
+
+  function checkDraw(){
+    if (STATUS.numMoves == 9){
+      console.log("DRAW!");
+    }
+  }
+
+  function humanMove(e){
+    var target = e.target;
+    if (target.innerHTML == "" && !STATUS.gameOver) {
+      target.innerHTML = STATUS.isX ? "X" : "O";
+      STATUS.isX = !STATUS.isX;
+      checkWins();
+      STATUS.numMoves++
+      checkDraw();
+    }
+
   }
 
 
