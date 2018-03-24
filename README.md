@@ -12,8 +12,9 @@
 - ~~Place X on click~~
 - ~~Alternate placing X/O on click~~
 - ~~Win logic~~
-- Reset the game
-- End game modal
+- ~~Reset the game~~
+- ~~End game modal~~
+- Improve design
 - Single player mode toggle
 - ~~Computer logic: random~~
 - Computer logic: hard mode (minimax?)
