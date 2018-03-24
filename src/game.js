@@ -71,7 +71,6 @@ var Game = (function() {
   function checkWins() {
     STATUS.gameOver = WINS.some(win => checkWin(win));
     if (STATUS.gameOver) {
-      reset()
       return true;
     }
     return false;
@@ -95,7 +94,7 @@ var Game = (function() {
 
   function checkDraw(){
     if (STATUS.numMoves == 9){
-      reset();
+
       return true;
     }
     return false;
@@ -105,15 +104,14 @@ var Game = (function() {
     var target = e.target;
     if (target.innerHTML == "" && !STATUS.gameOver) {
       target.innerHTML = STATUS.userPlayer;
-      if (!checkWins()){
-        STATUS.numMoves++
+      STATUS.numMoves++
+      if (checkWins() || checkDraw()){
+        reset()
       }
       else{
-        return
-      }
-      if (!STATUS.gameOver && !checkDraw()){
         computerMove();
       }
+
     }
   }
 
@@ -133,8 +131,8 @@ var Game = (function() {
       let target = DOM.game.querySelector('[data-value="'+place+'"]');
       target.innerHTML = STATUS.computerPlayer;
       STATUS.numMoves++
-      if (!checkWins()){
-        checkDraw()
+      if (checkWins() || checkDraw()){
+        reset();
       }
     }
   }
