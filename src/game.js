@@ -53,7 +53,10 @@ var Game = (function() {
     STATUS.gameOver = WINS.some(win => checkWin(win));
     if (STATUS.gameOver) {
       console.log(STATUS.winner + " is the winner");
+      return true;
     }
+    return false;
+
   }
 
   function checkWin(winArray) {
@@ -75,20 +78,21 @@ var Game = (function() {
   function checkDraw(){
     if (STATUS.numMoves == 9){
       console.log("DRAW!");
+      return true;
     }
+    return false;
   }
 
   function handleClick(e){
     var target = e.target;
     if (target.innerHTML == "" && !STATUS.gameOver) {
-      target.innerHTML = STATUS.isX ? "X" : "O";
-      STATUS.isX = !STATUS.isX;
-      checkWins();
-      STATUS.numMoves++
-      if (!STATUS.gameOver){
-        checkDraw();
+      target.innerHTML = STATUS.userPlayer;
+      if (!checkWins()){
+        STATUS.numMoves++
       }
-      computerMove();
+      if (!STATUS.gameOver && !checkDraw()){
+        computerMove();
+      }
     }
   }
 
@@ -106,11 +110,9 @@ var Game = (function() {
     let place = STATUS.availableMoves[Math.floor(Math.random()*STATUS.availableMoves.length)]
     if (place){
       let target = DOM.game.querySelector('[data-value="'+place+'"]');
-      target.innerHTML = STATUS.isX?"X":"O";
-      STATUS.isX = !STATUS.isX
+      target.innerHTML = STATUS.computerPlayer;
       STATUS.numMoves++
-      checkWins()
-      if (!STATUS.gameOver){
+      if (!checkWins()){
         checkDraw()
       }
     }
