@@ -93,7 +93,6 @@ var Game = (function() {
     if (target.innerHTML == "" && !STATUS.gameOver) {
       target.innerHTML = STATUS.userPlayer;
       STATUS.computerMove = true;
-      // STATUS.numMoves++
       step();
     }
   }
