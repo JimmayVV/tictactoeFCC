@@ -34,7 +34,7 @@ var Game = (function() {
     STATUS.numMoves = 0;
     STATUS.gameOver = false;
     Modal.init(str);
-    play();
+    bindEvents();
 
   }
 
@@ -42,9 +42,7 @@ var Game = (function() {
     STATUS.userPlayer = str;
     STATUS.computerPlayer = str == "X" ? "O" : "X";
     render();
-    if (STATUS.userPlayer=="O"){
-      computerMove();
-    }
+
   }
 
   function render() {
@@ -60,7 +58,9 @@ var Game = (function() {
       DOM.boxes.push(box);
     }
     DOM.game.style.display = "flex";
-
+    if (STATUS.userPlayer=="O"){
+      computerMove();
+    }
   }
 
   function cacheDom() {
@@ -71,7 +71,6 @@ var Game = (function() {
   function checkWins() {
     STATUS.gameOver = WINS.some(win => checkWin(win));
     if (STATUS.gameOver) {
-      // console.log(STATUS.winner + " is the winner");
       reset()
       return true;
     }
@@ -90,7 +89,7 @@ var Game = (function() {
     return false;
   }
 
-  function play() {
+  function bindEvents() {
     DOM.game.addEventListener("click",  handleClick)
   }
 
@@ -140,10 +139,9 @@ var Game = (function() {
     }
   }
 
-
   function init() {
     cacheDom();
-    play();
+    bindEvents();
   };
 
   return {
