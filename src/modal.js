@@ -8,8 +8,8 @@ var Modal = (function() {
     MODAL.content = document.querySelector('.modal-content')
     MODAL.text = MODAL.content.querySelector('p')
   }
-  function init(str = "") {
-    cacheDom();
+
+  function render(str){
     if (str){
       MODAL.choices.removeEventListener("click", start)
       MODAL.text.innerHTML = str +"<br> Play Again? <br>"
@@ -18,14 +18,21 @@ var Modal = (function() {
       MODAL.text.innerHTML = "Your choice is here...X goes first"
     }
     MODAL.modal.style.display = "block"
-    MODAL.choices.addEventListener("click", start)
   }
 
+  function bindEvent(){
+    MODAL.choices.addEventListener("click", start)
+  }
   function start(e){
     MODAL.modal.style.display = "none";
     MODAL.value = e.target.innerHTML;
     Game.setUserPlayer(MODAL.value);
+  }
 
+  function init(str = "") {
+    cacheDom();
+    render(str);
+    bindEvent()
   }
   return {
     init:init,

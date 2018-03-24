@@ -1,8 +1,7 @@
 var Game = (function() {
-  const DOM = {};
-  const STATUS = {
+  const DOM = {}; //populated by cacheDom
+  const STATUS = { //reset by reset()
     winner: "",
-    // isX: true,
     gameOver: false,
     userPlayer: "",
     computerPlayer: "",
@@ -38,12 +37,6 @@ var Game = (function() {
 
   }
 
-  function setUserPlayer(str) {
-    STATUS.userPlayer = str;
-    STATUS.computerPlayer = str == "X" ? "O" : "X";
-    render();
-
-  }
 
   function render() {
     while (DOM.game.firstChild){
@@ -63,17 +56,12 @@ var Game = (function() {
     }
   }
 
-  function cacheDom() {
-    DOM.game = document.querySelector('.grid')
-  }
+
 
 
   function checkWins() {
     STATUS.gameOver = WINS.some(win => checkWin(win));
-    if (STATUS.gameOver) {
-      return true;
-    }
-    return false;
+    return STATUS.gameOver;
   }
 
   function checkWin(winArray) {
@@ -88,16 +76,9 @@ var Game = (function() {
     return false;
   }
 
-  function bindEvents() {
-    DOM.game.addEventListener("click",  handleClick)
-  }
 
   function checkDraw(){
-    if (STATUS.numMoves == 9){
-
-      return true;
-    }
-    return false;
+    return (STATUS.numMoves == 9);
   }
 
   function handleClick(e){
@@ -137,6 +118,24 @@ var Game = (function() {
     }
   }
 
+  function bindEvents() {
+    DOM.game.addEventListener("click",  handleClick)
+  }
+
+  function cacheDom() {
+    DOM.game = document.querySelector('.grid')
+  }
+
+//public methods//
+
+//called by Modal.js
+  function setUserPlayer(str) {
+    STATUS.userPlayer = str;
+    STATUS.computerPlayer = str == "X" ? "O" : "X";
+    render();
+  }
+
+// called by App.js
   function init() {
     cacheDom();
     bindEvents();
