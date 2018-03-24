@@ -5,20 +5,29 @@ var Modal = (function() {
   function cacheDom(){
     MODAL.choices = document.querySelector('.choices')
     MODAL.modal = document.querySelector('.modal')
+    MODAL.content = document.querySelector('.modal-content')
+    MODAL.text = MODAL.content.querySelector('p')
   }
-  function init() {
+  function init(str = "") {
     cacheDom();
-    MODAL.choices.addEventListener("click", function start(e){
-      MODAL.modal.style.display = "none";
-      MODAL.value = e.target.innerHTML;
-      Game.setUserPlayer(MODAL.value);
-    })
+    if (str){
+      MODAL.choices.removeEventListener("click", start)
+      MODAL.text.innerHTML = str +"<br> Play Again? <br>"
+    }
+    else {
+      MODAL.text.innerHTML = "Your choice is here...X goes first"
+    }
+    MODAL.modal.style.display = "block"
+    MODAL.choices.addEventListener("click", start)
   }
-  function test(){
-    return MODAL.value
+
+  function start(e){
+    MODAL.modal.style.display = "none";
+    MODAL.value = e.target.innerHTML;
+    Game.setUserPlayer(MODAL.value);
+
   }
   return {
     init:init,
   }
-
 })();

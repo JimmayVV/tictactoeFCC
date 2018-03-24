@@ -39,13 +39,17 @@ footer {
 .modal-content {
   color: #bbb;
   background-color: #fefefe;
+  background-color: rgba(240, 240, 240, 0.3);
   text-align: center;
-  margin: 15% auto;
+  margin: 20% auto;
   /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  line-height: 2em;
+  width: 70%;
   /* Could be more or less, depending on screen size */ }
+  .modal-content p {
+    background-color: #fefefe; }
 
 /* The Close Button */
 .choice {

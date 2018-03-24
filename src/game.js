@@ -2,7 +2,7 @@ var Game = (function() {
   const DOM = {};
   const STATUS = {
     winner: "",
-    isX: true,
+    // isX: true,
     gameOver: false,
     userPlayer: "",
     computerPlayer: "",
@@ -21,6 +21,23 @@ var Game = (function() {
     [3, 5, 7]
   ];
 
+  function reset(){
+    DOM.game.removeEventListener("click",handleClick)
+    let str;
+    if (STATUS.winner !== ""){
+      str = STATUS.winner + " is the winner!"
+    }
+    else{
+      str = "Draw!"
+    }
+    STATUS.winner = "";
+    STATUS.numMoves = 0;
+    STATUS.gameOver = false;
+    Modal.init(str);
+    play();
+
+  }
+
   function setUserPlayer(str) {
     STATUS.userPlayer = str;
     STATUS.computerPlayer = str == "X" ? "O" : "X";
@@ -31,6 +48,9 @@ var Game = (function() {
   }
 
   function render() {
+    while (DOM.game.firstChild){
+      DOM.game.removeChild(DOM.game.firstChild)
+    }
     DOM.boxes = [];
     for (let i = 1; i < 10; i++) {
       var box = document.createElement("div");
@@ -45,18 +65,17 @@ var Game = (function() {
 
   function cacheDom() {
     DOM.game = document.querySelector('.grid')
-    DOM.choices = document.querySelector('.choices')
   }
 
 
   function checkWins() {
     STATUS.gameOver = WINS.some(win => checkWin(win));
     if (STATUS.gameOver) {
-      console.log(STATUS.winner + " is the winner");
+      // console.log(STATUS.winner + " is the winner");
+      reset()
       return true;
     }
     return false;
-
   }
 
   function checkWin(winArray) {
@@ -77,7 +96,7 @@ var Game = (function() {
 
   function checkDraw(){
     if (STATUS.numMoves == 9){
-      console.log("DRAW!");
+      reset();
       return true;
     }
     return false;
@@ -89,6 +108,9 @@ var Game = (function() {
       target.innerHTML = STATUS.userPlayer;
       if (!checkWins()){
         STATUS.numMoves++
+      }
+      else{
+        return
       }
       if (!STATUS.gameOver && !checkDraw()){
         computerMove();
@@ -123,6 +145,7 @@ var Game = (function() {
     cacheDom();
     play();
   };
+
   return {
     init: init,
     setUserPlayer: setUserPlayer

@@ -16,11 +16,16 @@
 .modal-content {
   color: #bbb;
     background-color: #fefefe;
+    background-color: rgba(240,240,240,.3);
     text-align: center;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 20% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    line-height: 2em;
+    width: 70%; /* Could be more or less, depending on screen size */
+    p{
+      background-color: #fefefe;
+    }
 }
 
 /* The Close Button */
