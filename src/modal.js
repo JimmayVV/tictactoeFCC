@@ -3,7 +3,7 @@ var Modal = (function() {
   const MODAL = {};
 
   function cacheDom(){
-    MODAL.choices = document.querySelector('.choices')
+    MODAL.choice = document.querySelectorAll('.choice')
     MODAL.modal = document.querySelector('.modal')
     MODAL.content = document.querySelector('.modal-content')
     MODAL.text = MODAL.content.querySelector('p')
@@ -11,7 +11,8 @@ var Modal = (function() {
 
   function render(str){
     if (str){
-      MODAL.choices.removeEventListener("click", start)
+      MODAL.choice[0].removeEventListener("click", start)
+      MODAL.choice[1].removeEventListener("click", start)
       MODAL.text.innerHTML = str +"<br> Play Again? <br>"
     }
     else {
@@ -21,7 +22,8 @@ var Modal = (function() {
   }
 
   function bindEvent(){
-    MODAL.choices.addEventListener("click", start)
+    MODAL.choice[0].addEventListener("click", start)
+    MODAL.choice[1].addEventListener("click", start)
   }
   function start(e){
     MODAL.modal.style.display = "none";

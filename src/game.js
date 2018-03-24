@@ -6,7 +6,8 @@ var Game = (function() {
     userPlayer: "",
     computerPlayer: "",
     numMoves: 0,
-    availableMoves: []
+    availableMoves: [],
+    computerMove: false,
   };
 
   const WINS = [
@@ -21,42 +22,50 @@ var Game = (function() {
   ];
 
   function reset(){
-    DOM.game.removeEventListener("click",handleClick)
     let str;
-    if (STATUS.winner !== ""){
+    if (STATUS.winner !== "") {
       str = STATUS.winner + " is the winner!"
-    }
-    else{
+    } else {
       str = "Draw!"
     }
     STATUS.winner = "";
     STATUS.numMoves = 0;
     STATUS.gameOver = false;
+    STATUS.computerMove = false;
     Modal.init(str);
-    bindEvents();
 
   }
 
+  function clearBoard(){
+    if (DOM.game.children.length > 0){
+      for (let i = 0; i < 9; i++) {
+        DOM.game.children[i].innerHTML = "";
+      }
+    }
+  }
 
   function render() {
-    while (DOM.game.firstChild){
-      DOM.game.removeChild(DOM.game.firstChild)
-    }
-    DOM.boxes = [];
-    for (let i = 1; i < 10; i++) {
-      var box = document.createElement("div");
-      box.classList.add('box');
-      box.setAttribute("data-value",i);
-      DOM.game.appendChild(box);
-      DOM.boxes.push(box);
-    }
-    DOM.game.style.display = "flex";
-    if (STATUS.userPlayer=="O"){
-      computerMove();
-    }
+      DOM.boxes = [];
+      for (let i = 1; i < 10; i++) {
+        var box = document.createElement("div");
+        box.classList.add('box');
+        box.setAttribute("data-value", i);
+        DOM.game.appendChild(box);
+        DOM.boxes.push(box);
+      }
+      DOM.game.style.display = "flex";
   }
 
-
+  function step(){
+    if (checkWins() || checkDraw()) {
+        reset()
+        return;
+      }
+    if (STATUS.computerMove){
+      STATUS.numMoves++
+      computerMove()
+    }
+  }
 
 
   function checkWins() {
@@ -67,7 +76,7 @@ var Game = (function() {
   function checkWin(winArray) {
     let result = "";
     winArray.forEach(function(item) {
-      result += document.querySelector('[data-value="'+item+'"]').innerHTML;
+      result += document.querySelector('[data-value="' + item + '"]').innerHTML;
     })
     if (result == "XXX" || result == "OOO") {
       STATUS.winner = result[0];
@@ -76,69 +85,65 @@ var Game = (function() {
     return false;
   }
 
-
-  function checkDraw(){
+  function checkDraw() {
     return (STATUS.numMoves == 9);
   }
 
-  function handleClick(e){
+  function handleClick(e) {
     var target = e.target;
     if (target.innerHTML == "" && !STATUS.gameOver) {
       target.innerHTML = STATUS.userPlayer;
+      STATUS.computerMove = !STATUS.computerMove;
       STATUS.numMoves++
-      if (checkWins() || checkDraw()){
-        reset()
-      }
-      else{
-        computerMove();
-      }
-
+      step();
     }
   }
 
-  function getEmptySquares(){
-   STATUS.availableMoves = [];
-    DOM.boxes.forEach(function addAvailable(box){
-      if (box.innerHTML==""){
+  function getEmptySquares() {
+    STATUS.availableMoves = [];
+    DOM.boxes.forEach(function addAvailable(box) {
+      if (box.innerHTML == "") {
         STATUS.availableMoves.push(box.getAttribute('data-value'))
       }
     })
   }
 
-  function computerMove(){
+  function computerMove() {
     getEmptySquares();
-    let place = STATUS.availableMoves[Math.floor(Math.random()*STATUS.availableMoves.length)]
-    if (place){
-      let target = DOM.game.querySelector('[data-value="'+place+'"]');
+    let place = STATUS.availableMoves[Math.floor(Math.random() * STATUS.availableMoves.length)]
+    if (place) {
+      let target = DOM.game.querySelector('[data-value="' + place + '"]');
       target.innerHTML = STATUS.computerPlayer;
-      STATUS.numMoves++
-      if (checkWins() || checkDraw()){
-        reset();
-      }
+      STATUS.computerMove = !STATUS.computerMove;
+      step();
     }
   }
 
   function bindEvents() {
-    DOM.game.addEventListener("click",  handleClick)
+    DOM.game.addEventListener("click", handleClick)
   }
 
   function cacheDom() {
     DOM.game = document.querySelector('.grid')
   }
 
-//public methods//
+  //public methods//
 
-//called by Modal.js
+  //called by Modal.js
   function setUserPlayer(str) {
     STATUS.userPlayer = str;
     STATUS.computerPlayer = str == "X" ? "O" : "X";
-    render();
+    STATUS.computerMove = str == "O";
+    clearBoard();
+    step();
   }
 
-// called by App.js
+  // called by App.js
   function init() {
     cacheDom();
     bindEvents();
+    render();
+    step();
   };
 
   return {
