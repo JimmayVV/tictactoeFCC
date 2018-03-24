@@ -33,7 +33,6 @@ var Game = (function() {
     STATUS.gameOver = false;
     STATUS.computerMove = false;
     Modal.init(str);
-
   }
 
   function clearBoard(){
@@ -57,12 +56,12 @@ var Game = (function() {
   }
 
   function step(){
+    STATUS.numMoves++
     if (checkWins() || checkDraw()) {
         reset()
         return;
       }
     if (STATUS.computerMove){
-      STATUS.numMoves++
       computerMove()
     }
   }
@@ -86,15 +85,15 @@ var Game = (function() {
   }
 
   function checkDraw() {
-    return (STATUS.numMoves == 9);
+    return (STATUS.numMoves == 10);
   }
 
   function handleClick(e) {
     var target = e.target;
     if (target.innerHTML == "" && !STATUS.gameOver) {
       target.innerHTML = STATUS.userPlayer;
-      STATUS.computerMove = !STATUS.computerMove;
-      STATUS.numMoves++
+      STATUS.computerMove = true;
+      // STATUS.numMoves++
       step();
     }
   }
@@ -111,12 +110,11 @@ var Game = (function() {
   function computerMove() {
     getEmptySquares();
     let place = STATUS.availableMoves[Math.floor(Math.random() * STATUS.availableMoves.length)]
-    if (place) {
-      let target = DOM.game.querySelector('[data-value="' + place + '"]');
-      target.innerHTML = STATUS.computerPlayer;
-      STATUS.computerMove = !STATUS.computerMove;
-      step();
-    }
+    let target = DOM.game.querySelector('[data-value="' + place + '"]');
+    target.innerHTML = STATUS.computerPlayer;
+    STATUS.computerMove = false;
+    step();
+
   }
 
   function bindEvents() {
