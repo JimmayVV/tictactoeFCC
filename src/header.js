@@ -10,12 +10,12 @@ var Header = (function(){
     DOM.header = document.querySelector('header');
   }
 
-  // Set the dome element to the content var we defined above
+  // Set the DOM element to the content var we defined above
   function render(){
     DOM.header.innerHTML = content;
   }
 
-  // Thie function will call the cacheDom function (which saves the desired elements to JSON objects) and then renders data to them
+  // This function will call the cacheDom function (which saves the desired elements to JSON objects) and then renders data to them
   function init(){
     cacheDom();
     render();

@@ -24,7 +24,7 @@ var Modal = (function() {
       MODAL.choice[1].removeEventListener("click", start);  // Remove the event listener for the 'O' option in the modal
       MODAL.text.innerHTML = str +"<br> Play Again? <br>";  // Change the paragraph to display the provided string (who won, or tied) plus the inviation to play again
     } else {
-      // You already have this set in the DOM - which means you probably don't need this conditional - but even if you did, you could have captured it in a var such as MODAL.defaultMessage
+      // NOTE to repo owner: You already have this set in the DOM - which means you probably don't need this conditional - but even if you did, you could have captured it in a var such as MODAL.defaultMessage
       MODAL.text.innerHTML = "Your choice is here...X goes first";  // Default message will simply invite the player to play a game - has not played yet this session
     }
     MODAL.modal.style.display = "block";  // display: block ensures the modal itself is visible (as opposed to hidden)
