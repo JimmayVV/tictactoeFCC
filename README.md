@@ -21,7 +21,7 @@
 - Toggle easy/hard mode?
 
 #### Jimmy's TODO's: ####
-1. ~~Finish commenting the current state of the application ~~
-2. ~~Convert checkWins function into a pure function, so that we can check wins against hypothetical grids, not just the current grid ~~
+1. ~~Finish commenting the current state of the application~~
+2. ~~Convert checkWins function into a pure function, so that we can check wins against hypothetical grids, not just the current grid~~
 3. ~~Convert basically everything into pure functions, using return values from the calling functions to set the main game state (if necessary)~~
 4. ~~We want to be able to check hypothetical game states without screwing up our current state~~
