@@ -6,21 +6,21 @@ let Game = (function() {
     gameOver: false,
     userPlayer: "",
     computerPlayer: "",
-    numMoves: 0,
+    numMovesLeft: 0,
     availableMoves: [],
     computerMove: false
   };
 
   // All the possible winning combinations based on cell ID
   const WINS = [
-    [1, 2, 3],  // Top row
-    [4, 5, 6],  // Middle row
-    [7, 8, 9],  // Bottom row
-    [1, 4, 7],  // Left column
-    [2, 5, 8],  // Middle column
-    [3, 6, 9],  // Right column
-    [1, 5, 9],  // \ top left-bottom right diagonal
-    [3, 5, 7]   // / bottom left-top right diagonal
+    [0, 1, 2],  // Top row
+    [3, 4, 5],  // Middle row
+    [6, 7, 8],  // Bottom row
+    [0, 3, 6],  // Left column
+    [1, 4, 7],  // Middle column
+    [2, 5, 8],  // Right column
+    [0, 4, 8],  // \ top left-bottom right diagonal
+    [2, 4, 6]   // / bottom left-top right diagonal
   ];
 
   // This function will do one of two things: 1. return a copy of the provided grid, or 2. it will return an array of null cells (a blank game grid)
@@ -51,30 +51,29 @@ let Game = (function() {
   // Primary function will render the game's main gameGrid to the DOM by either creating it, or updating it if it already exists
   function render(grid = gameGrid) {
     // Use either a supplied grid, or if not supplied, the gameGrid
-
     let node = DOM.game;
     let count = node.children.length;
 
     // If the grid isn't empty, and doesn't contain 9 children, then delete all the children so that it is empty since the DOM is invalid, we can't trust it
-    if (node.children > 0 && node.children !== 9) {
+    if (count > 0 && count !== 9) {
       while (node.firstChild) {
         node.removeChild(node.firstChild);
       }
     }
 
     // Now that we know it is either empty or valid, render the grid to the DOM by either creating an element, or editing the existing one
-    for (let i = 0; i < workingGrid.length; ++i) {
+    for (let i = 0; i < grid.length; ++i) {
       // Get or set the content to display on the dom
-      let content = workingGrid[i] ? workingGrid[i] : '';
+      let content = grid[i] ? grid[i] : '';
 
       if (count === 0) {
         // if the grid dom was empty, then create a child element and push it to the dom
         let box = document.createElement("div");
         box.classList.add('box');
         box.setAttribute("data-value", i + 1);
-        box.innerHTML(content);
+        box.innerHTML = content;
         box.addEventListener('click', () => {
-          if (STATUS.gameOver) return;  // Don't run any clicks that happen if the game is over
+          if (STATUS.gameOver || gameGrid[i] !== null) return;  // Don't run any clicks that happen if the game is over, or the cell is occupied
           gameGrid = playMove(i); // Update the gameGrid based on the move played
           step();                 // call step to check if the game is over now (someone won, or tie game) and if not, run the computer's turn
         });
@@ -88,35 +87,52 @@ let Game = (function() {
     return 1;
   }
 
-  // TODO: go through this more when I am more "with it"
+  // Process a user click (if that is what called this function), or process the computer's
+  // move if step was called after rendering the user's move within this function.
+  // Once the computer has made its move, step will await another player move
+  // If the game is over this function will not run
   function step() {
     // Render whatever moves have been made up to this point
     render();
     let winner = checkWins();
     let draw = checkDraw();
+    
+    // If it is the user's turn (check if it's not computer turn in Settings)
+    if (!STATUS.computerMove && !winner && !draw) {
+      // NO: Process the click at the given location
+      // NO (already done): Render the click
+      // Set the game to be the computer's turn
+      STATUS.computerMove = true;
+      // Call 'step' again, which will render the computer move, as defined below:
+      step();
+    } 
+    else if (!winner && !draw) // If it is the computer's turn (meaning this was called after the player made a move, and the game's not over):
+    {
+      // Make a move for the computer
+      let empties = getEmptySquares();
+      gameGrid = playMove(empties[Math.floor(Math.random() * empties.length)], STATUS.computerPlayer);
+      // Set the game to be the user's turn
+      STATUS.computerMove = false;
+      // Render the move that was made
+      render();
+    }
+
+    winner = checkWins();
+    draw = checkDraw();
 
     // Check for winners or a draw - if the game is over:
     if (winner) {
       // save in string var who won (or if it was a tie)
-      STATUS.winner = winner;
+      //STATUS.winner = winner;
       // call Modal.init(str) with this value which will trigger a rematch
-      Modal.init(`${winner} is the winner!`);
+      Modal.init(`${STATUS.winner} is the winner!`);
       // freeze the rest of the logic of this function (by returning out of this function)
       return false;
     }
-    
-    if (!computerMove) {
-    // If it is the user's turn (check if it's not computer turn in Settings)
-      // Process the click at the given location
-      // Render the click
-      // Set the game to be the computer's turn
-      // Call 'step' again, which will render the computer move, as defined below:
-    } 
-    else // If it is the computer's turn (meaning this was called after the player made a move, and the game's not over):
-    {
-      // Make a move for the computer
-      // Render the move to the page
-      // Set the game to be the user's turn
+
+    if (draw) {
+      Modal.init(`Draw!`);
+      return false;
     }
     
   }
@@ -131,7 +147,7 @@ let Game = (function() {
       if (result) winner = result
     });
 
-    return result;
+    return winner;
     /*
     let gameOver = WINS.some((win) => checkWin(win, grid));  // If someone has won (as defined by the checkWin function for each 'winning' pssibility) then store 'true', otherwise 'false'
     return gameOver;//STATUS.gameOver;   // Return whatever the result of the above calculation is. This also stored in the main state JSON var 'STATUS'
@@ -144,20 +160,34 @@ let Game = (function() {
     if (!grid) return false;
 
     // Verify that the first cell is not null, and if so, then compare if the middle element is equal to both the first, and last element - if all are true, then we have a winner
-    let winner = (grid[winArray[0]] && grid[winArray[1]] == grid[winArray[1]] && grid[winArray[1]] == grid[winArray[1]]);
-    //STATUS.winner = winner;
+    let winner = (grid[winArray[0]] && grid[winArray[1]] == grid[winArray[0]] && grid[winArray[1]] == grid[winArray[2]]);
+    if (winner) STATUS.winner = grid[winArray[0]];
     return winner;
   }
 
   // Very simply checks if 10 moves have been played, in order to determine if the game was a draw
   function checkDraw(grid = gameGrid) {
-    return (STATUS.numMoves > grid.length);
+    STATUS.numMovesLeft = getEmptySquares().length;
+    if (STATUS.numMovesLeft) return false;
+    return true;
+  }
+
+  // Set STATUS.availableMoves to all of the available moves
+  function getEmptySquares(grid = gameGrid) {
+    let results = [];
+    
+    grid.map((item, index) => {
+      if (item == null) results.push(index);
+    });
+
+    return results;
   }
 
   // Play a move for the the given icon
   function playMove(index, icon = STATUS.userPlayer, grid = gameGrid) {
-    // If the given grid item is not null, then it is already filled, so return to end the function before it's even started
-    if (grid[index]) return false;
+    console.log(`'${icon}' wants to move to ${index}`);
+    // If the given grid item is not null, then it is already filled, so return the provided grid before we try to modify it
+    if (grid[index]) return grid;
 
     // Play the move
     grid[index] = icon;
@@ -166,92 +196,6 @@ let Game = (function() {
     return grid;
   }
 
-  // THE BELOW CODE IS BEING FOLDED INTO THE ABOVE CODE - HAS NOT BEEN OPTIMIZED YET
-
-
-  // Processes the player clicking on a grid item in the game
-  /*function handleClick(e) {
-    // Get the target dom element
-    var target = e.target;
-    // Check if the cell is empty, and verify that the game is not over
-    if (target.innerHTML == "" && !STATUS.gameOver) {
-      target.innerHTML = STATUS.userPlayer; // Place the player's icon in that cell
-      STATUS.computerMove = true;           // Indicate it's the computer's turn
-      step();                               // Step to the computer's turn, who will now go
-    }
-  }*/
-
-
-  //////////////////////////////////////////////////////////////////////
-  function reset(){
-    let str;
-    if (STATUS.winner !== "") {
-      str = STATUS.winner + " is the winner!"
-    } else {
-      str = "Draw!"
-    }
-    STATUS.winner = "";
-    STATUS.numMoves = 0;
-    STATUS.gameOver = false;
-    STATUS.computerMove = false;
-    Modal.init(str);
-  }
-
-  function clearBoard(){
-    if (DOM.game.children.length > 0){
-      for (let i = 0; i < 9; i++) {
-        DOM.game.children[i].innerHTML = "";
-      }
-    }
-  }
-
-  function render(grid) {
-    DOM.boxes = [];
-    for (let i = 0; i < grid.length; ++i) {
-      let box = document.createElement("div");
-      box.classList.add('box');
-      box.setAttribute("data-value", i + 1);
-      DOM.game.appendChild(box);
-      DOM.boxes.push(box);
-    }
-    DOM.game.style.display = "flex";
-  }
-
-  function step(){
-    STATUS.numMoves++
-    if (checkWins() || checkDraw()) {
-      reset();
-      return;
-    }
-    if (STATUS.computerMove){
-      computerMove();
-    }
-  }
-
-
-  // Set STATUS.availableMoves to all of the available moves
-  function getEmptySquares() {
-    STATUS.availableMoves = [];
-    // Loop through all of the nodes in the game grid
-    DOM.boxes.forEach(function addAvailable(box) {
-      // Check if the current item is empty, if so it's an available move
-      if (box.innerHTML == "") {
-        STATUS.availableMoves.push(box.getAttribute('data-value')); // Store the data-value attribute to the availableMoves array so we can call it
-      }
-    });
-  }
-
-  // Computes what move a computer player should make, and then makes that move
-  function computerMove() {
-    // Get all of the empty squares (via getEmptySquares function, which stores the result in a shared JSON var)
-    getEmptySquares();
-    let place = STATUS.availableMoves[Math.floor(Math.random() * STATUS.availableMoves.length)]; // Pick a completely random item in the availableMoves array
-    let target = DOM.game.querySelector('[data-value="' + place + '"]');  // Get the dom node of the chosen element data-value
-    target.innerHTML = STATUS.computerPlayer; // Place the computer's icon in that cell
-    STATUS.computerMove = false;              // Tell the game it is not the computer's turn, so the player can now play
-    step();                                   // Proceed to the next step in the game
-
-  }
 
   // Add a click event listener to the game
   function bindEvents() {
@@ -270,20 +214,21 @@ let Game = (function() {
     STATUS.userPlayer = str;
     STATUS.computerPlayer = str == "X" ? "O" : "X";
     STATUS.computerMove = str == "O";
-    clearBoard();
-    step();
+    gameGrid = makeGrid();
+    DOM.game.style.display = "flex";
+    render();
+    if (STATUS.computerMove) step();
   }
 
   // called by App.js
   function init() {
     cacheDom();
-    bindEvents();
-    render();
-    step();
+    //render();
   };
 
   return {
     init: init,
     setUserPlayer: setUserPlayer
   };
+
 }());
